@@ -1,10 +1,14 @@
 package com.app.vertx.eventloops;
 
 import io.vertx.core.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
 public class TestEventLoop extends AbstractVerticle {
+
+  private static final Logger LOG = LoggerFactory.getLogger(TestEventLoop.class);
 
   public static void main(String[] args) {
     Vertx vertx = Vertx.vertx(new VertxOptions()
@@ -19,7 +23,7 @@ public class TestEventLoop extends AbstractVerticle {
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
 //    super.start(startPromise);
-    System.out.println("Start " + getClass().getName());
+    LOG.debug("Start {}", getClass().getName());
     startPromise.complete();
 //    Thread.sleep(5000);
   }

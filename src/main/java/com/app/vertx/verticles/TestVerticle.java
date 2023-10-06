@@ -5,13 +5,15 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
 
 public class TestVerticle extends AbstractVerticle {
 
-//  private static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class); //TODO: Fix Logger using slf4j
+  private static final Logger LOG = LoggerFactory.getLogger(TestVerticle.class);
 
   //main method is to just entry point to run the app
   public static void main(String[] args) {
@@ -22,7 +24,7 @@ public class TestVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
-    System.out.println("Hello from Verticle " + getClass().getName());
+    LOG.debug("Hello from Verticle {}", getClass().getName());
     vertx.deployVerticle(new TestVerticle2()); //Deploy verticles of verticles
     vertx.deployVerticle(new TestVerticle3());
     vertx.deployVerticle(TestVerticleN.class.getName(),

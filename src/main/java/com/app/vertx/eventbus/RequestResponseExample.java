@@ -5,6 +5,8 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RequestResponseExample {
 
@@ -18,24 +20,30 @@ public class RequestResponseExample {
   }
 
   static class RequestVerticle extends AbstractVerticle {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RequestVerticle.class);
+
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
       startPromise.complete();
       var eventBus = vertx.eventBus();
-      System.out.println("Sending message...");
+      LOG.debug("Sending message...");
       eventBus.<JsonArray>request(ADDRESS, new JsonObject().put("message", "Hello world!").put("version", 1), event -> {
-        System.out.println("Response received: " + event.result().body());
+        LOG.debug("Response received: {}", event.result().body());
       });
     }
   }
 
   static class ResponseVerticle extends AbstractVerticle {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ResponseVerticle.class);
+
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
 
       var eventBus = vertx.eventBus();
       eventBus.<JsonObject>consumer(ADDRESS, handler -> {
-        System.out.println("EventBus message received: " + handler.body());
+        LOG.debug("EventBus message received: {}", handler.body());
         handler.reply(new JsonArray().add("one").add("two").add("three"));
       });
       startPromise.complete();
